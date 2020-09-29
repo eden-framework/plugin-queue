@@ -15,19 +15,27 @@ func (g *GenerationPlugin) GenerateEntryPoint(opt plugins.Option, cwd string) st
 	globalPkgPath := path.Join(opt.PackageName, "internal/global")
 	globalFilePath := path.Join(cwd, "internal/global")
 	tpl := fmt.Sprintf(`,
-		{{ .UseWithoutAlias "github.com/eden-framework/eden-framework/pkg/application" "" }}.WithConfig(&{{ .UseWithoutAlias "%s" "%s" }}.RedisConfig)`, globalPkgPath, globalFilePath)
+		{{ .UseWithoutAlias "github.com/eden-framework/eden-framework/pkg/application" "" }}.WithConfig(&{{ .UseWithoutAlias "%s" "%s" }}.QueueConfig)`, globalPkgPath, globalFilePath)
 	return tpl
 }
 
 func (g *GenerationPlugin) GenerateFilePoint(opt plugins.Option, cwd string) []*plugins.FileTemplate {
-	file := plugins.NewFileTemplate("global", path.Join(cwd, "internal/global/redis.go"))
+	file := plugins.NewFileTemplate("global", path.Join(cwd, "internal/global/queue.go"))
 	file.WithBlock(`
-var RedisConfig = struct {
-	Redis *{{ .UseWithoutAlias "github.com/eden-framework/plugin-redis/redis" "" }}.Redis
+var QueueConfig = struct {
+	Producer *{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Producer
+	Consumer *{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Consumer
 }{
-	Redis: &{{ .UseWithoutAlias "github.com/eden-framework/plugin-redis/redis" "" }}.Redis{
-		Host: "localhost",
-		Port: 6379,
+	Producer: &{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Producer{
+		Driver: {{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.DRIVER__REDIS
+		Host:   "localhost",
+		Port:   6379,
+		Topic:  "default",
+	},
+	Consumer: &{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Consumer{
+		Driver:  {{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.DRIVER__REDIS
+		Brokers: []string{"localhost:6379"},
+		Topic:   "default",
 	},
 }
 `)

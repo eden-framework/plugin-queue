@@ -17,10 +17,10 @@ const (
 	DRIVER__REDIS          // redis
 )
 
-type ConsumerDriver interface {
+type consumerDriver interface {
 	Consume(ctx context.Context, handler func(m common.QueueMessage) error) error
 }
 
-type ProducerDriver interface {
+type producerDriver interface {
 	Produce(ctx context.Context, messages ...common.QueueMessage) error
 }
