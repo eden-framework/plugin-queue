@@ -44,7 +44,7 @@ func (c *Consumer) Init() {
 	c.SetDefault()
 	switch c.Driver {
 	case DRIVER__BUILDIN:
-		c.consumerDriver = newMemoryQueue()
+		c.consumerDriver = newMemoryQueue(100)
 	case DRIVER__REDIS:
 		host, port, err := net.SplitHostPort(c.Brokers[0])
 		if err != nil {

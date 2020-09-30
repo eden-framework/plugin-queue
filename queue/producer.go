@@ -30,7 +30,7 @@ func (p *Producer) Init() {
 	p.SetDefault()
 	switch p.Driver {
 	case DRIVER__BUILDIN:
-		p.producerDriver = newMemoryQueue()
+		p.producerDriver = newMemoryQueue(100)
 	case DRIVER__REDIS:
 		driver := &redis.Redis{
 			Host:     p.Host,
