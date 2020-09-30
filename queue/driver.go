@@ -18,7 +18,7 @@ const (
 )
 
 type consumerDriver interface {
-	Consume(ctx context.Context, handler func(m common.QueueMessage) error) error
+	Consume(ctx context.Context, topic string, handler func(m common.QueueMessage) error) error
 }
 
 type producerDriver interface {

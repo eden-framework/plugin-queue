@@ -18,9 +18,6 @@ type Consumer struct {
 	// Partition should NOT be specified e.g. 0
 	GroupID string
 
-	// The topic to read messages from.
-	Topic string
-
 	// Partition to read messages from.  Either Partition or GroupID may
 	// be assigned, but not both
 	Partition int
@@ -41,15 +38,13 @@ func (c *Consumer) SetDefault() {
 	if c.Driver == DRIVER__KAFKA && c.GroupID == "" {
 		panic("[Consumer] must specify GroupID when use KAFKA driver")
 	}
-	if c.Topic == "" {
-		c.Topic = "default"
-	}
 }
 
 func (c *Consumer) Init() {
 	c.SetDefault()
 	switch c.Driver {
 	case DRIVER__BUILDIN:
+		c.consumerDriver = newMemoryQueue()
 	case DRIVER__REDIS:
 		host, port, err := net.SplitHostPort(c.Brokers[0])
 		if err != nil {
@@ -64,7 +59,6 @@ func (c *Consumer) Init() {
 			Port:     int(portInteger),
 			User:     c.User,
 			Password: c.Password,
-			Topic:    c.Topic,
 		}
 		driver.Init()
 		c.consumerDriver = driver
@@ -72,7 +66,6 @@ func (c *Consumer) Init() {
 		driver := &kafka.Consumer{
 			Brokers:   c.Brokers,
 			GroupID:   c.GroupID,
-			Topic:     c.Topic,
 			Partition: c.Partition,
 		}
 		driver.Init()
