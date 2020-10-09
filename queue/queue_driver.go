@@ -5,16 +5,16 @@ import (
 	"github.com/eden-framework/common"
 )
 
-//go:generate eden generate enum --type-name=Driver
+//go:generate eden generate enum --type-name=QueueDriver
 // api:enum
-type Driver uint8
+type QueueDriver uint8
 
 // queue driver type
 const (
-	DRIVER_UNKNOWN  Driver = iota
-	DRIVER__BUILDIN        // buildin
-	DRIVER__KAFKA          // kafka
-	DRIVER__REDIS          // redis
+	QUEUE_DRIVER_UNKNOWN  QueueDriver = iota
+	QUEUE_DRIVER__BUILDIN             // buildin
+	QUEUE_DRIVER__KAFKA               // kafka
+	QUEUE_DRIVER__REDIS               // redis
 )
 
 type consumerDriver interface {

@@ -7,7 +7,7 @@ import (
 )
 
 type Producer struct {
-	Driver   Driver
+	Driver   QueueDriver
 	Host     string
 	Port     int
 	User     string
@@ -16,10 +16,10 @@ type Producer struct {
 }
 
 func (p *Producer) SetDefault() {
-	if p.Driver == DRIVER_UNKNOWN {
-		p.Driver = DRIVER__BUILDIN
+	if p.Driver == QUEUE_DRIVER_UNKNOWN {
+		p.Driver = QUEUE_DRIVER__BUILDIN
 	}
-	if p.Driver == DRIVER__REDIS || p.Driver == DRIVER__KAFKA {
+	if p.Driver == QUEUE_DRIVER__REDIS || p.Driver == QUEUE_DRIVER__KAFKA {
 		if p.Host == "" {
 			panic("[Producer] must specify Host and Port when use REDIS or KAFKA drivers")
 		}
@@ -29,9 +29,9 @@ func (p *Producer) SetDefault() {
 func (p *Producer) Init() {
 	p.SetDefault()
 	switch p.Driver {
-	case DRIVER__BUILDIN:
+	case QUEUE_DRIVER__BUILDIN:
 		p.producerDriver = newMemoryQueue(100)
-	case DRIVER__REDIS:
+	case QUEUE_DRIVER__REDIS:
 		driver := &redis.Redis{
 			Host:     p.Host,
 			Port:     p.Port,
@@ -40,7 +40,7 @@ func (p *Producer) Init() {
 		}
 		driver.Init()
 		p.producerDriver = driver
-	case DRIVER__KAFKA:
+	case QUEUE_DRIVER__KAFKA:
 		driver := &kafka.Producer{
 			Host: p.Host,
 			Port: p.Port,

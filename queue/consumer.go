@@ -10,7 +10,7 @@ import (
 )
 
 type Consumer struct {
-	Driver Driver
+	Driver QueueDriver
 	// The list of broker addresses used to connect to the kafka cluster.
 	Brokers []string
 
@@ -27,15 +27,15 @@ type Consumer struct {
 }
 
 func (c *Consumer) SetDefault() {
-	if c.Driver == DRIVER_UNKNOWN {
-		c.Driver = DRIVER__BUILDIN
+	if c.Driver == QUEUE_DRIVER_UNKNOWN {
+		c.Driver = QUEUE_DRIVER__BUILDIN
 	}
-	if c.Driver == DRIVER__REDIS || c.Driver == DRIVER__KAFKA {
+	if c.Driver == QUEUE_DRIVER__REDIS || c.Driver == QUEUE_DRIVER__KAFKA {
 		if len(c.Brokers) == 0 {
 			panic("[Consumer] must specify Broker list when use REDIS or KAFKA drivers")
 		}
 	}
-	if c.Driver == DRIVER__KAFKA && c.GroupID == "" {
+	if c.Driver == QUEUE_DRIVER__KAFKA && c.GroupID == "" {
 		panic("[Consumer] must specify GroupID when use KAFKA driver")
 	}
 }
@@ -43,9 +43,9 @@ func (c *Consumer) SetDefault() {
 func (c *Consumer) Init() {
 	c.SetDefault()
 	switch c.Driver {
-	case DRIVER__BUILDIN:
+	case QUEUE_DRIVER__BUILDIN:
 		c.consumerDriver = newMemoryQueue(100)
-	case DRIVER__REDIS:
+	case QUEUE_DRIVER__REDIS:
 		host, port, err := net.SplitHostPort(c.Brokers[0])
 		if err != nil {
 			panic(fmt.Sprintf("[Consumer] SplitHostPort from broker %s failed: %v", c.Brokers[0], err))
@@ -62,7 +62,7 @@ func (c *Consumer) Init() {
 		}
 		driver.Init()
 		c.consumerDriver = driver
-	case DRIVER__KAFKA:
+	case QUEUE_DRIVER__KAFKA:
 		driver := &kafka.Consumer{
 			Brokers:   c.Brokers,
 			GroupID:   c.GroupID,

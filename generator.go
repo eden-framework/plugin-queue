@@ -27,12 +27,12 @@ var QueueConfig = struct {
 	Consumer *{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Consumer
 }{
 	Producer: &{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Producer{
-		Driver: {{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.DRIVER__REDIS,
+		Driver: {{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.QUEUE_DRIVER__REDIS,
 		Host:   "localhost",
 		Port:   6379,
 	},
 	Consumer: &{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Consumer{
-		Driver:  {{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.DRIVER__REDIS,
+		Driver:  {{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.QUEUE_DRIVER__REDIS,
 		Brokers: []string{"localhost:6379"},
 	},
 }
