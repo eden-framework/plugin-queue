@@ -9,7 +9,7 @@ import (
 
 func TestProduceAndConsumeWithBuildin(t *testing.T) {
 	producer := &Producer{
-		Driver: DRIVER__BUILDIN,
+		Driver: QUEUE_DRIVER__BUILDIN,
 	}
 	producer.Init()
 
@@ -29,7 +29,7 @@ func TestProduceAndConsumeWithBuildin(t *testing.T) {
 	}()
 
 	consumer := &Consumer{
-		Driver: DRIVER__BUILDIN,
+		Driver: QUEUE_DRIVER__BUILDIN,
 	}
 	consumer.Init()
 	go func() {
@@ -55,7 +55,7 @@ func TestProduceAndConsumeWithBuildin(t *testing.T) {
 
 func TestProduceAndConsumeWithKafka(t *testing.T) {
 	producer := &Producer{
-		Driver: DRIVER__KAFKA,
+		Driver: QUEUE_DRIVER__KAFKA,
 		Host:   "localhost",
 	}
 	producer.Init()
@@ -74,7 +74,7 @@ func TestProduceAndConsumeWithKafka(t *testing.T) {
 	}
 
 	consumer := &Consumer{
-		Driver:  DRIVER__KAFKA,
+		Driver:  QUEUE_DRIVER__KAFKA,
 		Brokers: []string{"localhost:9092"},
 		GroupID: "group1",
 	}
@@ -103,7 +103,7 @@ func TestProduceAndConsumeWithKafka(t *testing.T) {
 
 func TestProduceAndConsumeWithRedis(t *testing.T) {
 	producer := &Producer{
-		Driver: DRIVER__REDIS,
+		Driver: QUEUE_DRIVER__REDIS,
 		Host:   "localhost",
 	}
 	producer.Init()
@@ -122,7 +122,7 @@ func TestProduceAndConsumeWithRedis(t *testing.T) {
 	}
 
 	consumer := &Consumer{
-		Driver:  DRIVER__REDIS,
+		Driver:  QUEUE_DRIVER__REDIS,
 		Brokers: []string{"localhost:6379"},
 	}
 	consumer.Init()
