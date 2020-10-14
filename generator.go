@@ -23,15 +23,15 @@ func (g *GenerationPlugin) GenerateFilePoint(opt plugins.Option, cwd string) []*
 	file := plugins.NewFileTemplate("global", path.Join(cwd, "internal/global/queue.go"))
 	file.WithBlock(`
 var QueueConfig = struct {
-	Producer *{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Producer
-	Consumer *{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Consumer
+	QueueProducer *{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Producer
+	QueueConsumer *{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Consumer
 }{
-	Producer: &{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Producer{
+	QueueProducer: &{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Producer{
 		Driver: {{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.QUEUE_DRIVER__REDIS,
 		Host:   "localhost",
 		Port:   6379,
 	},
-	Consumer: &{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Consumer{
+	QueueConsumer: &{{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.Consumer{
 		Driver:  {{ .UseWithoutAlias "github.com/eden-framework/plugin-queue/queue" "" }}.QUEUE_DRIVER__REDIS,
 		Brokers: []string{"localhost:6379"},
 	},
